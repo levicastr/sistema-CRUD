@@ -1,4 +1,6 @@
 #include "lib.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 void cadastrar_aluno(aluno *raiz,int matricula,char *nome,char* telefone,char *email){
   if(raiz == NULL){
@@ -17,7 +19,9 @@ aluno* buscar_dados_aluno(aluno *raiz,int matricula);
 
 aluno *read_banco_de_dados(FILE *banco_de_dados){
   aluno *raiz = malloc(sizeof(aluno));
-
+  int aux;
+  fscanf(banco_de_dados,"%i",&aux);
+  aluno->matricula = aux;
 }
 
 void write_banco_de_dados(aluno *raiz,FILE *banco_de_dados);
