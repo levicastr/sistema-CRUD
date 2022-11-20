@@ -12,13 +12,8 @@ typedef struct disciplina{
 
 typedef struct aluno{
   int matricula;
-  // char *nome;
-  // char *telefone;
-  // char *email;
-  // int semestre;
-  // disciplina *disciplinas;
-  aluno  *filho_esq;
-  aluno  *filho_dir;
+  struct aluno  *filho_esq;
+  struct aluno  *filho_dir;
 }aluno;
 
 aluno *raiz = NULL;
