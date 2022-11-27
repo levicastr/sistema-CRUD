@@ -2,18 +2,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// void cadastrar_aluno(int matricula){
-//   if(raiz == NULL){
-//     aluno *new_aluno = malloc(sizeof(aluno));
-//     raiz = new_aluno;
-//   }else{
-//     buscar_dados_aluno(raiz,matricula); 
-//   }
+// void cadastrar_aluno(aluno *raiz,int matricula,char* nome,char* numero, char* email,disciplina** disciplinas){
+
 // }
 
-// void remover_aluno(aluno *raiz,int matricula);
 
-// void editar_aluno(aluno *raiz,int matricula);
+// aluno remover_aluno(aluno *raiz,int matricula){
+
+// }
+
+
+// void editar_aluno(aluno *raiz,int matricula){
+
+// }
 
 aluno* buscar_dados_aluno(aluno* raiz,int matricula){
     if(raiz == NULL){
@@ -34,6 +35,14 @@ aluno* buscar_dados_aluno(aluno* raiz,int matricula){
         }
     }
 }
+
+// aluno *read_banco_de_dados(FILE *banco_de_dados){
+
+// }
+
+// void write_banco_de_dados(aluno *raiz,FILE *banco_de_dados){
+
+// }
 
 int main(){
   aluno *eu = malloc(sizeof(aluno));

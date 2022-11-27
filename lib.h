@@ -10,24 +10,52 @@ typedef struct disciplina{
   float nota_final;
 }disciplina;
 
+typedef struct endereco{
+  char* rua;
+  int numero;
+  int cep;
+}endereco;
+
 typedef struct aluno{
   int matricula;
+  char* nome_aluno;
+  char* numero_aluno;
+  char* email_aluno;
+  endereco *endereco_aluno;
+  disciplina** disciplinas;
   struct aluno  *filho_esq;
   struct aluno  *filho_dir;
 }aluno;
 
 aluno *raiz = NULL;
 
-void cadastrar_aluno(int matricula);//falta char *nome,char* telefone,char *email
+// você deverá receber como parâmetro os dados de um aluno e adicionar estes dados
+// em uma Árvore Binária de Busca. Você deve considerar a matrícula do aluno como chave 
+// única do nó a ser inserido;
+void cadastrar_aluno(aluno *raiz,int matricula,char* nome,char* numero, char* email,disciplina** disciplinas);
 
-void remover_aluno(aluno *raiz,int matricula);
+// você deve receber como parâmetro a matrícula de um aluno e remover a nó da Árvore
+// Binária de Busca que contenha esta matrícula.
+aluno remover_aluno(aluno *raiz,int matricula);
 
+// você deve receber como parâmetro a matrícula de um aluno e encontrar o nó da
+// Árvore Binária de Busca que contenha esta matrícula. Após encontrar o nó, você deve perguntar 
+// qual dos dados pessoais definidos pela equipe será alterado e solicitar o novo valor para 
+// realizar a alteração. Note que esta função permite que seja alterado apenas os dados pessoais do aluno.
 void editar_aluno(aluno *raiz,int matricula);
 
+// você deve receber como parâmetro a matrícula de um aluno e encontrar o nó
+// da Árvore Binária de Busca que contenha esta matrícula. Após encontrar o nó, você deve 
+// apresentar os dados pessoais do aluno, assim como o conjunto de disciplinas e notas finais 
+// que o aluno tenha cursado. As disciplinas e notas devem ser apresentadas em ordem decrescente 
+// de notas e portanto você deve aplicar um algoritmo de ordenação(obrigatoriamente) para 
+// ordenar o vetor, antes de imprimi-lo.
 aluno* buscar_dados_aluno(aluno *raiz,int matricula);
 
-// aluno *read_banco_de_dados(FILE *banco_de_dados);
+// Ler o arquivo texto e ja preenche a arvore
+aluno *read_banco_de_dados(FILE *banco_de_dados);
 
-// void write_banco_de_dados(aluno *raiz,FILE *banco_de_dados);
+// salva a arvore no arquivo texto
+void write_banco_de_dados(aluno *raiz,FILE *banco_de_dados);
 
 #endif
