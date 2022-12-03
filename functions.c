@@ -54,9 +54,81 @@ void cadastrar_aluno(int matricula,char* nome,char* numero, char* email,int quan
         printf("Cadastro inválido. Chave duplicada\n");
     }
 }
+//
+aluno *removMaiorDireita( aluno * alu){
+    if(alu->filho_dir != NULL) 
+       return removMaiorDireita(&(alu)->filho_dir);
+    else{
+       aluno *aux = alu;
+       if(alu->filho_esq != NULL) // se nao houver essa verificacao, esse nó vai perder todos os seus filhos da esquerda!
+          alu = alu->filho_esq;
+       else
+          alu = NULL;
+       return aux;
+       }
+}
 
-aluno remover_aluno(int matricula);
+aluno *removMenorEsquerda(aluno *alu){
+    if(alu->filho_esq != NULL) 
+       return removMenorEsquerda(&(alu)->filho_esq);
+    else{
+       aluno *aux = alu; 
+       if(alu->filho_dir != NULL) // se nao houver essa verificacao, esse nó vai perder todos os seus filhos da direita!
+          alu = alu->filho_dir;
+       else
+          alu = NULL;
+       return aux;
+       }
+}
 
+void remover(aluno *Raiz, int matricula){
+    if(Raiz == NULL){   // esta verificacao serve para caso a matricula nao exista na arvore.
+       printf("Numero de matricula nao existe na arvore!");
+       return;
+    }
+    if(matricula < Raiz->matricula)
+       remover(&(Raiz)->filho_esq, matricula);
+    else 
+       if(matricula > Raiz->matricula)
+          remover(& Raiz->filho_dir, matricula);
+       else{    // se nao eh menor nem maior, logo, eh o numero que estou procurando! :)
+          aluno *Aux = Raiz;    
+          if ((Raiz->filho_esq == NULL) && (Raiz->filho_dir == NULL)){         // se nao houver filhos...
+                printf(Aux);
+                free(Aux);
+                Raiz = NULL; 
+               }
+          else{     // so tem o filho da direita
+             if (Raiz->filho_esq == NULL){
+                Raiz = Raiz->filho_dir;
+                Aux->filho_dir = NULL;
+                printf(Aux);
+                free(Aux); 
+                Aux = NULL;
+                }
+             else{            //so tem filho da esquerda
+                if (Raiz->filho_dir == NULL){
+                    Raiz = Raiz->filho_esq;
+                    Aux->filho_esq = NULL;
+                    printf(Aux);
+                    free(Aux); 
+                    Aux = NULL;
+                    }
+                else{       //Escolhi fazer o maior filho direito da subarvore esquerda.
+                   Aux = removMaiorDireita(&Raiz->filho_esq); //se vc quiser usar o Menor da esquerda, so o que mudaria seria isso:
+                   Aux->filho_esq = Raiz->filho_esq;          //        pAux = MenorEsquerda(&(*pRaiz)->direita);
+                   Aux->filho_dir = Raiz->filho_dir;
+                   Raiz->filho_esq = Raiz->filho_dir = NULL;
+                   printf(Raiz);
+                   free(Raiz); 
+                   Raiz = Aux; 
+                   Aux = NULL;   
+                   }
+                }
+             }
+          }
+}
+//
 void editar_aluno(int matricula);
 
 void imprimir_aluno(int matricula);
