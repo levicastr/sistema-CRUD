@@ -54,81 +54,56 @@ void cadastrar_aluno(int matricula,char* nome,char* numero, char* email,int quan
         printf("Cadastro inválido. Chave duplicada\n");
     }
 }
-//
-aluno *removMaiorDireita( aluno * alu){
-    if(alu->filho_dir != NULL) 
-       return removMaiorDireita(&(alu)->filho_dir);
-    else{
-       aluno *aux = alu;
-       if(alu->filho_esq != NULL) // se nao houver essa verificacao, esse nó vai perder todos os seus filhos da esquerda!
-          alu = alu->filho_esq;
-       else
-          alu = NULL;
-       return aux;
-       }
-}
 
-aluno *removMenorEsquerda(aluno *alu){
-    if(alu->filho_esq != NULL) 
-       return removMenorEsquerda(&(alu)->filho_esq);
-    else{
-       aluno *aux = alu; 
-       if(alu->filho_dir != NULL) // se nao houver essa verificacao, esse nó vai perder todos os seus filhos da direita!
-          alu = alu->filho_dir;
-       else
-          alu = NULL;
-       return aux;
-       }
-}
-
-void remover(aluno *Raiz, int matricula){
-    if(Raiz == NULL){   // esta verificacao serve para caso a matricula nao exista na arvore.
-       printf("Numero de matricula nao existe na arvore!");
-       return;
+aluno* remover_aluno(aluno *raiz, int matricula) {
+    if(raiz == NULL){
+        printf("Valor nao encontrado!\n");
+        return NULL;
+    } else { // procura o nó a remover_aluno
+        if(raiz->matricula == matricula) {
+            // remove nós folhas (nós sem filhos)
+            if(raiz->filho_esq == NULL && raiz->filho_dir == NULL) {
+                free(raiz);
+                quantidade_alunos--;
+                printf("Elemento folha removido: %d !\n", matricula);
+                return NULL;
+            }
+            else{
+                // remover_aluno nós que possuem dois 2 filho
+                if(raiz->filho_esq != NULL && raiz->filho_dir != NULL){
+                    aluno *aux = raiz->filho_esq; // subárvore à filho_esq
+                    while(aux->filho_dir != NULL)
+                        aux = aux->filho_dir; // obtêm o nó mais a filho_dir
+                    raiz->matricula = aux->matricula;
+                    aux->matricula = matricula;
+                    printf("Elemento trocado: %d !\n", matricula);
+                    raiz->filho_esq = remover_aluno(raiz->filho_esq, matricula);
+                    return raiz;
+                }
+                else{
+                    // remover_aluno nós que possuem apenas 1 filho
+                    aluno *aux;
+                    if(raiz->filho_esq != NULL)
+                        aux = raiz->filho_esq;
+                    else
+                        aux = raiz->filho_dir;
+                    free(raiz);
+                    quantidade_alunos--;
+                    printf("Elemento com 1 filho removido: %d !\n", matricula);
+                    return aux;
+                }
+            }
+        } else {
+            if(matricula < raiz->matricula)
+                raiz->filho_esq = remover_aluno(raiz->filho_esq, matricula);
+            else
+                raiz->filho_dir = remover_aluno(raiz->filho_dir, matricula);
+            return raiz;
+        }
     }
-    if(matricula < Raiz->matricula)
-       remover(&(Raiz)->filho_esq, matricula);
-    else 
-       if(matricula > Raiz->matricula)
-          remover(& Raiz->filho_dir, matricula);
-       else{    // se nao eh menor nem maior, logo, eh o numero que estou procurando! :)
-          aluno *Aux = Raiz;    
-          if ((Raiz->filho_esq == NULL) && (Raiz->filho_dir == NULL)){         // se nao houver filhos...
-                printf(Aux);
-                free(Aux);
-                Raiz = NULL; 
-               }
-          else{     // so tem o filho da direita
-             if (Raiz->filho_esq == NULL){
-                Raiz = Raiz->filho_dir;
-                Aux->filho_dir = NULL;
-                printf(Aux);
-                free(Aux); 
-                Aux = NULL;
-                }
-             else{            //so tem filho da esquerda
-                if (Raiz->filho_dir == NULL){
-                    Raiz = Raiz->filho_esq;
-                    Aux->filho_esq = NULL;
-                    printf(Aux);
-                    free(Aux); 
-                    Aux = NULL;
-                    }
-                else{       //Escolhi fazer o maior filho direito da subarvore esquerda.
-                   Aux = removMaiorDireita(&Raiz->filho_esq); //se vc quiser usar o Menor da esquerda, so o que mudaria seria isso:
-                   Aux->filho_esq = Raiz->filho_esq;          //        pAux = MenorEsquerda(&(*pRaiz)->direita);
-                   Aux->filho_dir = Raiz->filho_dir;
-                   Raiz->filho_esq = Raiz->filho_dir = NULL;
-                   printf(Raiz);
-                   free(Raiz); 
-                   Raiz = Aux; 
-                   Aux = NULL;   
-                   }
-                }
-             }
-          }
 }
-//
+
+
 void editar_aluno(int matricula);
 
 void imprimir_aluno(int matricula);
@@ -193,6 +168,9 @@ int main(){
     FILE* banco_de_dados = fopen("banco_de_dados.txt","r");
     FILE* backup = fopen("backup.txt","w");
     read_banco_de_dados(banco_de_dados);
+   
+    remover_aluno(raiz,511354);
+   
     write_banco_de_dados(backup);
     fclose(banco_de_dados);
     fclose(backup);
